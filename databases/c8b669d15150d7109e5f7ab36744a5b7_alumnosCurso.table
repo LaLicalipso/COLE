@@ -1,0 +1,22 @@
+(dp1
+S'idcurs'
+p2
+S'CHAR(512) NOT NULL'
+p3
+sS'idcurso'
+p4
+S'INTEGER REFERENCES cursos(id) ON DELETE CASCADE'
+p5
+sS'id'
+p6
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p7
+sS'dnialumno'
+p8
+S'INTEGER REFERENCES alumnos(id) ON DELETE CASCADE'
+p9
+sS'dnialum'
+p10
+S'CHAR(512)'
+p11
+s.

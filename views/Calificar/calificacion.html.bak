@@ -1,0 +1,3 @@
+{{extend 'layout.html'}}
+<h1>Esta es la plantilla Calificar/calificacion.html</h1>
+{{=form}}

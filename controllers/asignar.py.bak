@@ -1,0 +1,14 @@
+# coding: utf8
+
+def index(): return dict(mensaje="Hola")
+
+def alumnosCurso():
+    form= SQLFORM(db.alumnoscurso)
+    if form.accepts(request.vars,session):
+        response.flash='Datos ingresados correctamente'
+    elif form.errors:
+        response.flash='Hay uno o mas errores en la tabla'
+    else:
+        response.flash=''
+    titulo = ' Asignacion de listado de alumnos a un curso '
+    return dict(form = form, titulo=titulo)

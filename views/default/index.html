@@ -1,0 +1,26 @@
+{{left_sidebar_enabled=right_sidebar_enabled=False}}
+{{extend 'layout.html'}}
+
+{{if 'message' in globals():}}
+
+<h3>{{=message}}</h3>
+<br>
+
+<ul>
+Usted a ingresado al sistema, si ya se encuentra registrado haga click en:
+<br>
+  {{=A(T("Loguearse"), _href=URL('default','user'))}}
+<br>
+Si en cambio desea registrarse debera completar el formulario en el siguiente link y esperar a que se revise la solicitud:
+<br>
+  {{=A(T("Registrarse"), _href=URL('default','user/register'))}}
+<br>
+</ul>
+<br>
+<br>
+{{else:}}
+{{=BEAUTIFY(response._vars)}}
+{{pass}}
+
+{{block left_sidebar}}New Left Sidebar Content{{end}}
+{{block right_sidebar}}New Right Sidebar Content{{end}}

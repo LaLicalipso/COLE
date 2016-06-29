@@ -1,0 +1,19 @@
+{{extend 'layout.html'}}
+<h3>{{=message}}</h3>
+
+<br>
+
+<ul>
+Usted a ingresado al sistema de listados.<BR>
+Aquí podrá visualizar: 
+<BR>
+  {{=A(T("Lista de Alumnos"), _href=URL('Listas','alumnos'))}}
+<BR>
+  {{=A(T("Lista de Profesores"), _href=URL('Listas','profesores'))}}</li>
+<!--<BR>
+  {{=A(T("Lista de Materias"), _href=URL('Listas','materias'))}}</li>-->
+<BR>
+  {{=A(T("Lista de Cursos"), _href=URL('Listas','cursos'))}}</li>
+
+</ul>
+<br>

@@ -1,0 +1,8 @@
+{{extend 'layout_index.html'}}
+{{=tabla}}
+<br>
+<hr />
+<br>
+{{=form}}
+<h6>Aqui podrá dar de alta a los nuevos 
+usuarios asignandoles sus permisos correspondientes</h6>

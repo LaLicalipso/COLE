@@ -1,0 +1,3 @@
+{{extend 'layout_index.html'}}
+<h1>Esta es la plantilla de alumnos</h1>
+{{=tabla}}

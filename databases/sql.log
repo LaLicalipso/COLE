@@ -1,0 +1,345 @@
+timestamp: 2011-09-09T16:10:53.546000
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dni INTEGER NOT NULL UNIQUE,
+    last_name CHAR(128),
+    first_name CHAR(128),
+    email CHAR(128) UNIQUE,
+    calle CHAR(128),
+    nro_calle INTEGER,
+    localidad CHAR(128),
+    codigo_postal CHAR(512),
+    telefono CHAR(20),
+    celular CHAR(20),
+    password CHAR(512),
+    fecha_alta DATE,
+    fecha_alta_usuario TIMESTAMP,
+    fecha_baja TIMESTAMP,
+    fecha_baja_usuario TIMESTAMP,
+    registration_key CHAR(512),
+    reset_password_key CHAR(512)
+);
+success!
+timestamp: 2011-09-09T16:10:54.093000
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-09-09T16:10:54.538000
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-09-09T16:10:55.097000
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2011-09-09T16:10:55.574000
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-09-09T16:10:56.172000
+CREATE TABLE Cursos(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    CUPOF INTEGER,
+    nombre CHAR(512)
+);
+success!
+timestamp: 2011-09-12T11:39:08.066000
+CREATE TABLE Materias(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cupof INTEGER NOT NULL UNIQUE,
+    nombre CHAR(512)
+);
+success!
+timestamp: 2011-09-15T19:54:00.280000
+CREATE TABLE alumnos(
+    id INTEGER PRIMARY KEY AUTOINCREMENT
+);
+success!
+timestamp: 2011-09-15T20:26:05.090000
+ALTER TABLE alumnos ADD curso TEXT;
+timestamp: 2011-09-15T20:26:05.261000
+ALTER TABLE alumnos ADD nombre CHAR(512);
+timestamp: 2011-09-15T20:26:05.449000
+ALTER TABLE alumnos ADD dni INTEGER;
+timestamp: 2011-09-15T20:26:05.636000
+ALTER TABLE alumnos ADD division TEXT;
+timestamp: 2011-09-16T20:35:59.759000
+ALTER TABLE cursos ADD curso TEXT;
+timestamp: 2011-09-16T20:35:59.913000
+ALTER TABLE cursos ADD division TEXT;
+timestamp: 2011-09-16T20:39:18.635000
+ALTER TABLE materias ADD curso TEXT;
+timestamp: 2011-09-20T10:31:53.611000
+ALTER TABLE materias ADD profesor TEXT;
+timestamp: 2011-09-29T16:01:28.309000
+CREATE TABLE alumnosCurso(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idcurs CHAR(512) NOT NULL,
+    dnialum CHAR(512)
+);
+success!
+timestamp: 2011-09-30T09:47:55.336000
+ALTER TABLE alumnosCurso ADD idcurso INTEGER REFERENCES cursos(id) ON DELETE CASCADE;
+timestamp: 2011-09-30T09:47:55.601000
+ALTER TABLE alumnosCurso ADD dnialumno INTEGER REFERENCES alumnos(id) ON DELETE CASCADE;
+timestamp: 2011-10-01T15:26:44.734000
+ALTER TABLE alumnos ADD fechaingreso DATE;
+timestamp: 2011-10-01T20:13:35.350000
+CREATE TABLE Calificacion(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    IdAlumno INTEGER,
+    IdMateria INTEGER,
+    calificacion INTEGER
+);
+success!
+timestamp: 2011-11-19T15:45:35.139000
+ALTER TABLE cursos ADD descripcion CHAR(512);
+timestamp: 2011-11-19T18:12:05.780000
+ALTER TABLE alumnos ADD sexo CHAR(512);
+timestamp: 2013-08-19T19:04:54.588000
+ALTER TABLE calificacion ADD cupof INTEGER;
+timestamp: 2013-08-19T22:58:35.150260
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    service CHAR(512),
+    ticket CHAR(512),
+    renew CHAR(1)
+);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!

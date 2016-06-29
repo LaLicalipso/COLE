@@ -1,0 +1,17 @@
+{{extend 'layout.html'}}
+<h3>{{=message}}</h3>
+
+<br>
+
+<ul>
+Usted ha ingresado al control de altas.<BR>
+Aquí podrá ingresar nuevos registros como:
+<BR>
+  {{=A(T("Alumnos"), _href=URL('altas','alumnos'))}}
+<BR>
+  {{=A(T("Materias"), _href=URL('altas','Materias'))}}
+<BR>
+  {{=A(T("Cursos"), _href=URL('altas','cursos'))}}
+  
+</ul>
+<br>

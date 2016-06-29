@@ -1,0 +1,167 @@
+# -*- coding: utf-8 -*-
+# this file is released under public domain and you can use without limitations
+
+#########################################################################
+## This scaffolding model makes your app work on Google App Engine too
+#########################################################################
+
+if request.env.web2py_runtime_gae:            # if running on Google App Engine
+    db = DAL('google:datastore')              # connect to Google BigTable
+                                              # optional DAL('gae://namespace')
+    session.connect(request, response, db = db) # and store sessions and tickets there
+    ### or use the following lines to store sessions in Memcache
+    # from gluon.contrib.memdb import MEMDB
+    # from google.appengine.api.memcache import Client
+    # session.connect(request, response, db = MEMDB(Client()))
+else:                                         # else use a normal relational database
+    db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
+## if no need for session
+# session.forget()
+
+#########################################################################
+## Here is sample code if you need for
+## - email capabilities
+## - authentication (registration, login, logout, ... )
+## - authorization (role based authorization)
+## - services (xml, csv, json, xmlrpc, jsonrpc, amf, rss)
+## - crud actions
+## (more options discussed in gluon/tools.py)
+#########################################################################
+
+from gluon.tools import *
+mail = Mail()                                  # mailer
+auth = Auth(globals(),db)                      # authentication/authorization
+crud = Crud(globals(),db)                      # for CRUD helpers using auth
+service = Service(globals())                   # for json, xml, jsonrpc, xmlrpc, amfrpc
+plugins = PluginManager()
+
+db.define_table(
+    auth.settings.table_user_name,
+    Field('dni','integer', unique=True, required=True, notnull=True, label=T('DNI')),
+    Field('last_name', 'string',  length=128, default='',  required=True, label=T('Apellido')),
+    Field('first_name', 'string', length=128, default='', required=True, label=T('Nombre')),
+    Field('email', 'string',  length=128, default='',  required=True, unique=True,label=T('E-Mail')),
+    Field('calle',  length=128, label=T('Calle')),
+    Field('nro_calle', 'integer',label=T('Nro. de Calle')),
+    Field('localidad',  'list:string', length=128, label=T('Localidad')),
+    Field('codigo_postal', label=T('Código Postal')),
+    Field('telefono', 'string', length=20, label=T('Teléfono Particular')),
+    Field('celular', 'string', length=20, label=T('Celular')),
+    Field('password', 'password', length=512, required=True, readable=False, label='Contraseña'),
+    Field('fecha_alta','date', writable=False, readable=False, default=request.now.date),
+#    Field('usuario_alta', default=auth.user.id, writable=False, readable=False),
+    Field('fecha_alta_usuario','datetime', writable=False, readable=False, default=request.now),
+    Field('fecha_baja','datetime', default=None, writable=False, readable=False), 
+#    Field('usuario_baja', default=auth.user.id, writable=False, readable=False),
+    Field('fecha_baja_usuario','datetime', writable=False, readable=False, default=request.now),
+    Field('registration_key', length=512,
+          writable=True, readable=False, default='',label=T('Clave de registración')),
+    Field('reset_password_key', length=512,
+          writable=False, readable=False, default='',label=T('Clave de contraseña de restablecimiento')),
+
+          )
+auth.settings.create_user_groups = False
+# VALIDADORES DE LA TABLA DE USUARIOS
+usuario = db[auth.settings.table_user_name] # Con esto se abrevia todo en 'usuario'
+usuario.localidad.requires = IS_IN_SET(('G.Catan','La Ferrere','Virrey del Pino','San Justo', 'Casanova'), error_message='Falta ingresar localidad o no es valida.')
+usuario.dni.requires=IS_NOT_EMPTY(error_message='Falta Ingresar DNI')
+usuario.first_name.requires=IS_NOT_EMPTY(error_message='Falta ingresar Nombre')
+usuario.last_name.requires=IS_NOT_EMPTY(error_message='Falta ingresar Apellido')
+usuario.password.requires=IS_NOT_EMPTY(error_message='Falta ingresar Contraseña')
+usuario.email.requires = [
+  IS_EMAIL(error_message='El E-mail ingresado no es valido.Intente nuevamente.'),
+  IS_NOT_IN_DB(db, usuario.email)]
+usuario.dni.requires=IS_NOT_IN_DB(db, usuario.dni, error_message='DNI no valido.')  # requiere que el DNI no este previamente en la base de datos
+usuario.calle.requires = IS_NOT_EMPTY(error_message='Falta ingresar la Calle')
+usuario.nro_calle.requires = IS_NOT_EMPTY(error_message='Falta ingresar el numero de la calle')
+auth.settings.register_next = URL('index', args='login')
+#fin de validadores
+
+mail.settings.server =  'smtp.gmail.com:587'  # your SMTP server
+mail.settings.sender = 'villan.laura@gmail.com'         # your email
+mail.settings.login = 'villan.laura@gmail.com:klavier.ale.15185' # your credentials or None
+
+auth.settings.hmac_key = 'sha512:d5a9296b-86d3-4ae3-bd4f-e19faa94d6e3'   # before define_tables()
+auth.define_tables()                           # creates all needed tables
+auth.settings.mailer = mail                    # for user email verification
+auth.settings.registration_requires_verification = False
+auth.settings.registration_requires_approval = True
+auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['verify_email'])+'/%(key)s to verify your email'
+auth.settings.reset_password_requires_verification = False
+#auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['reset_password'])+'/%(key)s to reset your password'
+auth.messages.label_remember_me = 'Seguir conectado(por 30 días)' 
+#########################################################################
+## If you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
+## register with janrain.com, uncomment and customize following
+# from gluon.contrib.login_methods.rpx_account import RPXAccount
+# auth.settings.actions_disabled=['register','change_password','request_reset_password']
+# auth.settings.login_form = RPXAccount(request, api_key='...',domain='...',
+#    url = "http://localhost:8000/%s/default/user/login" % request.application)
+## other login methods are in gluon/contrib/login_methods
+#########################################################################
+
+crud.settings.auth = None                      # =auth to enforce authorization on crud
+
+#########################################################################
+## Define your tables below (or better in another model file) for example
+##
+## >>> db.define_table('mytable',Field('myfield','string'))
+##
+## Fields can be 'string','text','password','integer','double','boolean'
+##       'date','time','datetime','blob','upload', 'reference TABLENAME'
+## There is an implicit 'id integer autoincrement' field
+## Consult manual for more options, validators, etc.
+##
+## More API examples for controllers:
+##
+## >>> db.mytable.insert(myfield='value')
+## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
+## >>> for row in rows: print row.id, row.myfield
+#########################################################################
+#tabla de cursos
+db.define_table('cursos',
+    Field('curso','string', label=T('Curso')),
+    Field('division', 'string', label=T('Division')),
+    Field('descripcion', 'string', label=T('Descripcion'))
+    )    
+db.cursos.curso.requires = IS_IN_SET((1,2,3,4,5))
+db.cursos.division.requires = IS_IN_SET(('1ra','2da','3ra','4ta','5ta'))
+
+
+#Tabla Materias
+db.define_table('materias',
+    Field('cupof','integer', unique=True, required=True, notnull=True, label=T('CUPOF')),
+    Field('nombre','string', label=T('Nombre')),
+    Field('curso','reference cursos', label=T('Curso')),
+    Field('profesor','reference auth_user',label=T('Profesor a cargo'))
+    )
+#condiciones y mensajes
+db.materias.cupof.requires = IS_NOT_EMPTY(error_message='Falta ingresar Cupof')
+db.materias.cupof.requires=IS_NOT_IN_DB(db, db.materias.cupof)
+db.materias.curso.requires = IS_IN_DB(db,db.cursos.id, "%(descripcion)s")
+db.materias.profesor.requires = IS_IN_DB(db,db.auth_user.id,'%(last_name)s %(first_name)s')
+
+#tabla Alumnos
+db.define_table('alumnos',
+    Field('dni','integer', unique=True, required=True, notnull=True, label=T('DNI')),
+    Field('nombre','string',label=T('Apellido(s) y Nombre(s)')),
+    Field('sexo','string',label=T('Sexo')),    
+    Field('curso','reference cursos',label=T('Curso')),    
+    Field('fechaIngreso','date', writable=False, readable=False, default=request.now.date),    
+    )
+#condiciones y mensajes
+db.alumnos.curso.requires = IS_IN_DB(db,db.cursos.id, "%(descripcion)s")
+db.alumnos.sexo.requires = IS_IN_SET(('Femenino','Masculino'))
+db.alumnos.dni.requires = [
+                           IS_NOT_EMPTY(error_message='Falta ingresar DNI'), 
+                           IS_NOT_IN_DB(db, usuario.dni)]
+
+db.alumnos.nombre.requires = IS_NOT_EMPTY(error_message='Falta ingresar Nombre')
+
+
+#definicion de la tabla de Calificaciones
+db.define_table('calificacion',
+    Field('IdAlumno','string'),
+    Field('cupof','integer'),
+    Field('calificacion','integer'),
+    )

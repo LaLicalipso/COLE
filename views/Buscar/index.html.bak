@@ -1,0 +1,19 @@
+{{extend 'layout.html'}}
+<h3>{{=mensaje}}</h3>
+
+<br>
+
+<ul>
+Usted a ingresado al sistema de busqueda.<BR>
+Aquí podrá buscar datos de: 
+<BR>
+  {{=A(T("Alumnos"), _href=URL('Listas','alumnos'))}}
+<BR>
+  {{=A(T("Profesores"), _href=URL('Listas','profesores'))}}</li>
+<BR>
+  {{=A(T("Materias"), _href=URL('Listas','materias'))}}</li>
+<BR>
+  {{=A(T("Cursos"), _href=URL('Listas','cursos'))}}</li>
+
+</ul>
+<br>

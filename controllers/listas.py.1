@@ -1,0 +1,32 @@
+# coding: utf8
+
+def index(): return dict(message="Bienvenido")
+
+def alumnos():
+    filas = db(db.alumnos.id > 0).select()
+    tabla = SQLTABLE((filas),
+    headers={'alumnos.id':'ID','alumnos.dni':'DNI','alumnos.nombre':'Nombre','alumnos.curso':'Curso','alumnos.division':'Division'})
+    #,linkto = 'editarAlumno')
+    return dict(tabla = tabla)
+
+def materias():
+    filas = db(db.materias.id > 0).select(materias.cupof,materias.nombre,materias.curso,materias.profesor)
+    tabla = SQLTABLE((filas),
+    headers={'materias.cupof':'CUPOF','alumnos.nombre':'Nombre','alumnos.curso':'Curso','alumnos.profesor':'Profesor a cargo'})
+    #,linkto = 'editarAlumno')
+    return dict(tabla = tabla)
+    
+def profesores():
+    filas = db(db.auth_user.id > 0 and auth_membership == 'Profesor')
+    return dict(tabla=tabla)
+
+def cursos():
+    filas = db(db.cursos.id > 0).select(db.cursos.curso,db.cursos.division)
+    tabla = SQLTABLE(filas)
+    return dict(tabla = tabla)
+    
+def editarAlumnos():
+    
+    idalumno = request.args[2]
+    form = SQLFORM(db.alumnos, idalumno, deletable = True)
+    return dict(form = form)
