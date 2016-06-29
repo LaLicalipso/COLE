@@ -34,18 +34,14 @@ response.menu = [
     (T('Profesores'), False, URL('Listas','profesores'))
     ]),
     
-    (T('Buscar'), False, URL('Buscar','index'), [
-    
+    (T('Buscar'), False, URL('Buscar','index'), [    
     ]),
     
     
-    (T('Calificar'), False, URL('Calificar','index'), [
-    
+    (T('Calificar'), False, URL('Calificar','index'), [    
     ]),
     
-    (T('Administrador'), False, URL('Admin','asignarPermiso'), [
-            (T('Editar'), False, URL('Listas','alumnos'))
-    
+    (T('Administrador'), False, URL('Admin','asignarPermiso'), [    
     ])
     
     ]

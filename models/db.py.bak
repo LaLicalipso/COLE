@@ -77,7 +77,7 @@ usuario.nro_calle.requires = IS_NOT_EMPTY(error_message='Falta ingresar el numer
 auth.settings.register_next = URL('index', args='login')
 #fin de validadores
 
-mail.settings.server = 'logging' or 'smtp.gmail.com:587'  # your SMTP server
+mail.settings.server =  'smtp.gmail.com:587'  # your SMTP server
 mail.settings.sender = 'villan.laura@gmail.com'         # your email
 mail.settings.login = 'villan.laura@gmail.com:klavier.ale.15185' # your credentials or None
 
